@@ -7,16 +7,36 @@ document.addEventListener('DOMContentLoaded', function() {
   const articles = document.getElementsByTagName("article");
   
   const numberOfArticles = articles.length;
+  let article = [];
 
   for(i = 0; i < numberOfArticles; i++) {
-    articles[i].getElementsByTagName("span")[1].addEventListener("click", function () {
-      console.log(articles[i]);
-    });
-    }
-    
+
+    article = articles[i].getElementsByTagName("span")[1];
+
+    article.addEventListener("click", function (e) { 
+      mimicServerCall()
+      .then(information => processLike(e))
+      .catch(function (error) {
+        document.getElementById("modal").classList.remove("hidden")
+        document.getElementById("modal").textContent = error;
+        setTimeout(function() { 
+          document.getElementById("modal").classList.add("hidden") 
+          }, 3000);
+        })
+      })
+  } 
 });
 
-
+function processLike(element) {
+  if(element.target.className.search("activated-heart") > 0) {
+    //The heart is activated. Remove that:
+    element.target.classList.remove("activated-heart");
+  }
+  else {
+    element.target.classList.add("activated-heart");
+  }
+  
+}
 
 
 //------------------------------------------------------------------------------
